@@ -8,6 +8,7 @@
 /addons/*
 /public/assets/addons/*
 /public/uploads/*
+/application/extra/site.php
 .idea
 *.log
 *.css.map
