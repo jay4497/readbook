@@ -66,6 +66,11 @@ class Index extends Backend
     public function login()
     {
         $url = $this->request->get('url', '', 'url_clean');
+        // 防止退出页面链接传递给登录页
+        if (strpos($url, 'index/logout') !== false) {
+            $url = '';
+        }
+
         $url = $url ?: 'index/index';
         if ($this->auth->isLogin()) {
             $this->success(__("You've logged in, do not login again"), $url);
