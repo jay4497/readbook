@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefined, Backend, Table, Form) {
+define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'WangEditor'], function ($, undefined, Backend, Table, Form, Editor) {
 
     var Controller = {
         index: function () {
@@ -22,8 +22,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'weigh',
+                search: false,
                 fixedColumns: true,
                 fixedRightNumber: 1,
+                showExport: false,
+                showToggle: false,
+                showColumns: false,
                 columns: [
                     [
                         {checkbox: true},
@@ -69,6 +73,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     } else {
                         catalog_el.attr('disabled', 'disabled');
                     }
+                });
+
+                const { createEditor, createToolbar } = Editor;
+                $('.editor').hide();
+                $('.editor').after('<div class="editor-wrapper"><div class="editor-toolbar"></div><div class="editor-container""></div>');
+                var myeditor = createEditor({
+                    selector: '.editor-container',
+                    html: '<p></p>',
+                    config: {
+                        placeholder: 'Type here...',
+                        onChange(editor) {
+                            const html = editor.getHtml();
+
+                        }
+                    },
+                    mode: 'simple', // or 'simple'
+                });
+
+                var toolbar = createToolbar({
+                    editor: myeditor,
+                    selector: '.editor-toolbar',
+                    config: {
+                        modalAppendToBody: false
+                    },
+                    mode: 'simple', // or 'simple'
                 });
 
                 Form.api.bindevent($("form[role=form]"));

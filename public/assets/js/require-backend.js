@@ -49,6 +49,8 @@ require.config({
         'selectpage': '../libs/fastadmin-selectpage/selectpage',
         'citypicker': '../libs/fastadmin-citypicker/dist/js/city-picker.min',
         'citypicker-data': '../libs/fastadmin-citypicker/dist/js/city-picker.data',
+
+        'WangEditor': '../libs/wang-editor/editor',
     },
     // shim依赖配置
     shim: {
@@ -111,7 +113,8 @@ require.config({
         'bootstrap-select-lang': ['bootstrap-select'],
         'jstree': ['css!../libs/jstree/dist/themes/default/style.css'],
         'validator-lang': ['validator'],
-        'citypicker': ['citypicker-data', 'css!../libs/fastadmin-citypicker/dist/css/city-picker.css']
+        'citypicker': ['citypicker-data', 'css!../libs/fastadmin-citypicker/dist/css/city-picker.css'],
+        'WangEditor': ['css!../libs/wang-editor/style.css'],
     },
     baseUrl: requirejs.s.contexts._.config.config.site.cdnurl + '/assets/js/', //资源基础路径
     map: {

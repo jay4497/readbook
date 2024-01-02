@@ -10,6 +10,7 @@
         <label class="control-label col-xs-12 col-sm-2">{:__('Text')}:</label>
         <div class="col-xs-12 col-sm-8">
             <textarea id="c-text" data-rule="required" class="form-control " rows="5" name="row[text]" cols="50"></textarea>
+            <p class="help-block">多段文字请使用换行进行区分</p>
         </div>
     </div>
     <div class="form-group">
@@ -18,24 +19,18 @@
             <div class="input-group">
                 <input id="c-audio" data-rule="required" type="text" class="form-control" name="row[audio]" autocomplete="off" value="">
                 <div class="input-group-addon no-border no-padding">
-                    <span><button type="button" id="faupload-audio" class="btn btn-danger faupload" data-input-id="c-audio" data-mimetype="audio/*" data-multiple="false" data-preview-id="p-audio"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
-                    <span><button type="button" id="fachoose-audio" class="btn btn-primary fachoose" data-input-id="c-audio" data-mimetype="audio/*" data-multiple="false"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
+                    <span><button type="button" id="faupload-audio" class="btn btn-danger faupload" data-input-id="c-audio" data-mimetype="audio/*" data-multiple="true" data-preview-id="p-audio"><i class="fa fa-upload"></i> {:__('Upload')}</button></span>
+                    <span><button type="button" id="fachoose-audio" class="btn btn-primary fachoose" data-input-id="c-audio" data-mimetype="audio/*" data-multiple="true"><i class="fa fa-list"></i> {:__('Choose')}</button></span>
                 </div>
                 <span class="msg-box n-right"></span>
             </div>
-            <ul class="row list-inline faupload-preview" id="p-audio"></ul>
+            <ul class="row list-inline faupload-preview" id="p-audio" data-template="audiotpl"></ul>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Flag')}:</label>
         <div class="col-xs-12 col-sm-8">
             <input id="c-flag" class="form-control" name="row[flag]" type="number" value="0">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
-        <div class="col-xs-12 col-sm-8">
-            <input id="c-weigh" class="form-control" name="row[weigh]" type="number" value="0">
         </div>
     </div>
     <div class="form-group layer-footer">
@@ -45,3 +40,15 @@
         </div>
     </div>
 </form>
+
+<script type="text/html" id="audiotpl">
+    <li class="col-xs-3">
+        <a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" style="margin-bottom: 10px;">
+            <audio controls>
+                <source src="<%=fullurl%>">
+                <i class="fa fa-file-audio-o"></i>
+            </audio>
+        </a>
+        <a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a>
+    </li>
+</script>

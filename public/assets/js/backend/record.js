@@ -22,12 +22,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 pk: 'id',
                 sortName: 'weigh',
+                search: false,
+                fixedColumns: true,
+                fixedRightNumber: 1,
+                showExport: false,
+                showToggle: false,
+                showColumns: false,
                 columns: [
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
-                        {field: 'content_id', title: __('Content_id')},
-                        {field: 'flag', title: __('Flag'), formatter: Table.api.formatter.flag},
+                        {field: 'content_id', title: __('Content_id'), addclass: 'selectpage', extend: 'data-source="content/index" data-field="title" data-multiple="false" autocomplete="off"', visible: false},
+                        {field: 'content_title', title: __('Content_id'), operate: false},
+                        {field: 'audio', title: __('Audio'), operate: false, formatter: Controller.api.audio},
+                        {field: 'text', title: __('Text'), operate: false, formatter: Table.api.formatter.content},
+                        {field: 'flag', title: __('Flag')},
                         {field: 'weigh', title: __('Weigh'), operate: false},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
@@ -46,6 +55,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         api: {
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
+            },
+            audio: function(val, row, index) {
+                if (val) {
+                    return '<audio controls><source src="' + Fast.api.cdnurl(val) + '"></audio>';
+                }
+                return '';
             }
         }
     };

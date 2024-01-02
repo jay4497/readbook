@@ -18,6 +18,9 @@ class Catalog extends Backend
      */
     protected $model = null;
 
+    protected $modelValidate = true;
+    protected $modelSceneValidate = true;
+
     public function _initialize()
     {
         parent::_initialize();
