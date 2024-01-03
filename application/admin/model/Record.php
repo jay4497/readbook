@@ -26,6 +26,11 @@ class Record extends Model
 
     protected static function init()
     {
+        self::beforeInsert(function ($row) {
+            $code = md5($row->audio);
+            $row->code = $code;
+        });
+
         self::afterInsert(function ($row) {
             $weigh = $row->weigh;
             if(empty($weigh)) {

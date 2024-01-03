@@ -54,7 +54,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
-                Form.api.bindevent($("form[role=form]"));
+                Form.api.bindevent($("form[role=form]"), null, null, () => {
+                    var text = $('#c-text').val();
+                    var audio = $('#c-audio').val();
+                    var text_segments = text.split('\\r\\n');
+                    var audio_segments = audio.split(',');
+                    if (text_segments.length !== audio_segments.length) {
+                        Toastr.error(__('Text pieces are not equal to audio\'s'));
+                        return false;
+                    }
+                });
             },
             audio: function(val, row, index) {
                 if (val) {

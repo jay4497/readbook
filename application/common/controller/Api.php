@@ -327,4 +327,23 @@ class Api
         //刷新Token
         $this->request->token();
     }
+
+    /**
+     * 判断是否持有书籍
+     *
+     * @param int $book_id 书籍ID
+     * @return bool
+     * @throws \think\Exception
+     */
+    protected function hasBook($book_id)
+    {
+        $len = \think\Db::name('book_user')
+            ->where('book_id', $book_id)
+            ->where('admin_id', $this->auth->id)
+            ->count();
+        if ($len > 0) {
+            return true;
+        }
+        return false;
+    }
 }

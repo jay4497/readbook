@@ -47,9 +47,12 @@ create table `fa_record` (
     `content_id` int not null comment '内容',
     `text` text null comment '文本',
     `audio` text null comment '音频',
+    `mime` varchar(100) not null comment 'MIME类型',
     `flag` tinyint(1) null default 0 comment '标识',
     `weigh` int null default 0 comment '权重',
-    primary key (`id`)
+    `code` varchar(50) not null comment '编号',
+    primary key (`id`),
+    unique (`code`)
 ) engine = innodb default charset = utf8mb4 comment '音频';
 
 create table `fa_book_user` (
