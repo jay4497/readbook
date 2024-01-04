@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use app\common\controller\Backend;
 use app\common\exception\UploadException;
+use app\common\library\Audio;
 use app\common\library\Upload;
 use fast\Random;
 use think\addons\Service;
@@ -21,7 +22,7 @@ use think\Validate;
 class Ajax extends Backend
 {
 
-    protected $noNeedLogin = ['lang'];
+    protected $noNeedLogin = ['lang', 'upload_audio'];
     protected $noNeedRight = ['*'];
     protected $layout = '';
 
@@ -117,6 +118,87 @@ class Ajax extends Backend
 
             $this->success(__('Uploaded successful'), '', ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
         }
+    }
+
+    public function upload_audio()
+    {
+        Config::set('default_return_type', 'json');
+
+        //必须还原upload配置,否则分片及cdnurl函数计算错误
+        Config::load(APP_PATH . 'extra/upload.php', 'upload');
+        Config::set('upload.savekey', '/../resources/audio/{year}{mon}{day}/{filemd5}{.suffix}');
+        //var_dump(Config::get('upload'));exit;
+        $audio = new Audio;
+        $playurl = url('ajax/play');
+
+        $chunkid = $this->request->post("chunkid");
+        if ($chunkid) {
+            if (!Config::get('upload.chunking')) {
+                $this->error(__('Chunk file disabled'));
+            }
+            $action = $this->request->post("action");
+            $chunkindex = $this->request->post("chunkindex/d");
+            $chunkcount = $this->request->post("chunkcount/d");
+            $filename = $this->request->post("filename");
+            $method = $this->request->method(true);
+            if ($action == 'merge') {
+                $attachment = null;
+                //合并分片文件
+                try {
+                    $upload = new Upload();
+                    $attachment = $upload->merge($chunkid, $chunkcount, $filename);
+                } catch (UploadException $e) {
+                    $this->error($e->getMessage());
+                }
+                $this->success(__('Uploaded successful'), '', ['url' => $attachment->url, 'fullurl' => cdnurl($attachment->url, true)]);
+            } elseif ($method == 'clean') {
+                //删除冗余的分片文件
+                try {
+                    $upload = new Upload();
+                    $upload->clean($chunkid);
+                } catch (UploadException $e) {
+                    $this->error($e->getMessage());
+                }
+                $this->success();
+            } else {
+                //上传分片文件
+                //默认普通上传文件
+                $file = $this->request->file('file');
+                try {
+                    $upload = new Upload($file);
+                    $upload->chunk($chunkid, $chunkindex, $chunkcount);
+                } catch (UploadException $e) {
+                    $this->error($e->getMessage());
+                }
+                $this->success();
+            }
+        } else {
+            $attachment = null;
+            //默认普通上传文件
+            $file = $this->request->file('file');
+            try {
+                $upload = new Upload($file);
+                $attachment = $upload->upload('');
+            } catch (UploadException $e) {
+                $this->error($e->getMessage());
+            }
+
+            $this->success(
+                __('Uploaded successful'),
+                '',
+                [
+                    'url' => $audio->uploadPath($attachment->url),
+                    'fullurl' => $audio->uploadPath($attachment->url, $playurl)
+                ]
+            );
+        }
+    }
+
+    public function play()
+    {
+        $path = $this->request->get('audio');
+        $audio = new Audio;
+        $audio->sendAudio($path);
     }
 
     /**
