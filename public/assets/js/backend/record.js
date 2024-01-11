@@ -49,6 +49,9 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         add: function () {
             Controller.api.bindevent();
         },
+        add_multi: function() {
+            Controller.api.bindevent();
+        },
         edit: function () {
             Controller.api.bindevent();
         },
@@ -59,7 +62,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     var audio = $('#c-audio').val();
                     var text_segments = text.split('\\r\\n');
                     var audio_segments = audio.split(',');
+                    console.log(text_segments);
+                    console.log(audio_segments);
                     if (text_segments.length !== audio_segments.length) {
+                        console.log('false');
                         Toastr.error(__('Text pieces are not equal to audio\'s'));
                         return false;
                     }

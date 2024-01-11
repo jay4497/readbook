@@ -57,22 +57,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         api: {
             bindevent: function () {
-                $('#c-book_id').on('change', () => {
-                    var val = $(this).val();
-                    var catalog_el = $('#c-parent_id');
+                $('#c-book_id').on('change', (e) => {
+                    var val = $(e.target).val();
+                    var catalog_el = $('#c-parent_id_text');
                     if (val) {
                         catalog_el.removeAttr('disabled');
-                        catalog_el.data('params', (obj) => {
+                        catalog_el.removeClass('sp_input_off');
+                        catalog_el.data('selectPageObject').option.params = (obj) => {
                             return {
                                 custom: {
-                                    'book_id': val
+                                    'book_id': $('#c-book_id').val()
                                 }
                             };
-                        });
+                        };
                     } else {
                         catalog_el.attr('disabled', 'disabled');
                     }
                 });
+
 
                 Form.api.bindevent($("form[role=form]"));
             }

@@ -1,4 +1,4 @@
-<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+<form id="add_multi-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Content_id')}:</label>
@@ -43,12 +43,24 @@
 
 <script type="text/html" id="audiotpl">
     <li class="col-xs-3">
-        <a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" style="margin-bottom: 10px;">
-            <audio controls>
+        <a href="<%=fullurl%>" data-url="<%=url%>" target="_blank" style="margin-bottom: 10px;height: auto;">
+            <audio controls style="display: block;width: 100%;">
                 <source src="<%=fullurl%>">
                 <i class="fa fa-file-audio-o"></i>
             </audio>
         </a>
         <a href="javascript:;" class="btn btn-danger btn-xs btn-trash"><i class="fa fa-trash"></i></a>
     </li>
+    <script>
+        document.querySelectorAll('audio').forEach((el) => {
+            el.addEventListener('play', (e) => {
+                var this_el = e.target;
+                document.querySelectorAll('audio').forEach((el) => {
+                    if (el !== this_el) {
+                        el.pause();
+                    }
+                })
+            });
+        });
+    </script>
 </script>
